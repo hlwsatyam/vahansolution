@@ -39,7 +39,7 @@ const HomeContent = ({ services, isLoading }) => {
                 key={service.id}
                 onClick={() => nanvifation(`/${service.to}`)}
                 whileHover={{ scale: 1.05 }}
-                className="bg-gradient-to-r cursor-pointer from-black/70 via-white/70 to-red-600/70 text-white rounded-xl shadow-lg p-4 flex items-center space-x-3"
+                className="bg-gradient-to-r cursor-pointer from-black/70   to-red-600/70 text-white rounded-xl shadow-lg p-4 flex items-center space-x-3"
               >
                 <div className="text-2xl">
                   {service.id === 1 && <CarOutlined />}
@@ -47,10 +47,10 @@ const HomeContent = ({ services, isLoading }) => {
                   {service.id === 3 && <SafetyCertificateOutlined />}
                 </div>
                 <div>
-                  <Title level={5} className="text-white m-0">
+                  <Title level={5} className="!text-white m-0">
                     {service.name}
                   </Title>
-                  <Paragraph className="text-white/80 m-0">
+                  <Paragraph className="text-white m-0">
                     {service.description}
                   </Paragraph>
                 </div>

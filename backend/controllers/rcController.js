@@ -39,8 +39,8 @@ let responsiveAPI;
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      // "X-API-Key": "test-credential-396015679557935104",
-      "X-API-Key": "ysLsNl44I9FZYXYk4LzfvRQM0QQhe668",
+      
+      "X-API-Key": "d9M9chG1Fhdzlh1ie7069nzAC5m6EIzA",
       "X-Auth-Type": "API-Key",
       "X-Reference-ID": "xxxx",
     },
@@ -48,8 +48,8 @@ let responsiveAPI;
   });
 
   if (!res.ok) {
-      console.log("res notttt")
-      console.log(res)
+       console.log(res)
+        return    ress.status(500).json({ message:  "Gridline API Down" });
     const resggg = await fetch(
       "https://stoplight.io/mocks/gridlines/gridlines-api-docs/133154724/rc-api/fetch-detailed",
       {
@@ -100,7 +100,7 @@ exports.getRCWithChallanDetails = async (req, ress) => {
 
     // 1. Check agar DB me already hai
     let rcData = await rcwithchallan.findOne({ rcNumber });
-
+console.log(rcData) 
     if (rcData) {
       console.log("Returning data from DB...");
       return ress.json(rcData.data); // DB ka data return
@@ -116,7 +116,7 @@ exports.getRCWithChallanDetails = async (req, ress) => {
 
 
 let responsiveAPI;
-
+ 
 
 
   const res = await fetch("https://api.gridlines.io/rc-api/fetch-detailed-challan", {
@@ -124,17 +124,17 @@ let responsiveAPI;
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      // "X-API-Key": "test-credential-396015679557935104",
-      "X-API-Key": "ysLsNl44I9FZYXYk4LzfvRQM0QQhe668",
+      "X-API-Key": "d9M9chG1Fhdzlh1ie7069nzAC5m6EIzA",
       "X-Auth-Type": "API-Key",
       "X-Reference-ID": "xxxx",
     },
     body: JSON.stringify({ rc_number: rcNumber, consent: "Y" }),
   });
 
-  if (!res.ok) {
+  if (!res.ok) { 
       console.log("res notttt")
       console.log(res)
+        return    ress.status(500).json({ message:  "Gridline API Down" });
     const resggg = await fetch(
       "https://stoplight.io/mocks/gridlines/gridlines-api-docs/133154724/rc-api/fetch-detailed-challan",
       {
@@ -218,7 +218,7 @@ let responsiveAPI;
       Accept: "application/json",
       "Content-Type": "application/json",
       // "X-API-Key": "test-credential-396015679557935104",
-      "X-API-Key": "ysLsNl44I9FZYXYk4LzfvRQM0QQhe668",
+      "X-API-Key": "d9M9chG1Fhdzlh1ie7069nzAC5m6EIzA",
       "X-Auth-Type": "API-Key",
       "X-Reference-ID": "xxxx",
     },

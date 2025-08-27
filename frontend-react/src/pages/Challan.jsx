@@ -18,7 +18,7 @@ const fetchRCDetails = async (rcNumber) => {
   const res = await fetch(
     `http://168.231.102.215:5000/api/rc/echallan/${rcNumber.rcNumber}/${rcNumber.chassis_number}/${rcNumber.engine_number}`
   ); // apna backend endpoint
-  console.log(res)
+ 
   if (!res.ok) {
 
    const errorData = await res.json().catch(() => ({

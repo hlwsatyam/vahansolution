@@ -17,7 +17,17 @@ const { Title, Paragraph } = Typography;
 // ✅ Backend se fetch karna
 const fetchRCDetails = async (rcNumber) => {
   const res = await fetch(`http://168.231.102.215:5000/api/rc/rcwithchallan/${rcNumber}`); // apna backend endpoint
-  if (!res.ok) throw new Error("Failed to fetch RC details");
+  if (!res.ok) {
+
+  const errorData = await res.json().catch(() => ({
+        message: "Something went wrong!",
+      }));
+
+      // Toast dikhao
+      toast.error(errorData.message || "Failed to fetch RC details");
+       // Error throw karo taki upar handle kar sako
+      throw new Error(errorData.message || "Failed to fetch RC details");
+  }
   const ss= await res.json();
   return ss
 };
