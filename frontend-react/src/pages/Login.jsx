@@ -9,7 +9,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { motion } from "framer-motion";
 import { logo } from "../LOCAL/VARIABLE";
 
-const API_URL = "http://10.123.169.207:5000/api";
+const API_URL = "http://168.231.102.215:5000/api";
 
 const loginUser = async (values) => {
   const res = await axios.post(`${API_URL}/login`, values);

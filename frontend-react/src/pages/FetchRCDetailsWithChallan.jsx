@@ -16,7 +16,7 @@ const { Title, Paragraph } = Typography;
 
 // ✅ Backend se fetch karna
 const fetchRCDetails = async (rcNumber) => {
-  const res = await fetch(`http://10.123.169.207:5000/api/rc/rcwithchallan/${rcNumber}`); // apna backend endpoint
+  const res = await fetch(`http://168.231.102.215:5000/api/rc/rcwithchallan/${rcNumber}`); // apna backend endpoint
   if (!res.ok) throw new Error("Failed to fetch RC details");
   const ss= await res.json();
   return ss
