@@ -11,12 +11,13 @@ import {
   SafetyCertificateOutlined,
   ArrowLeftOutlined,
 } from "@ant-design/icons";
+import RCCard from "../components/RCCard";
 
 const { Title, Paragraph } = Typography;
 
 // ✅ Backend se fetch karna
 const fetchRCDetails = async (rcNumber) => {
-  const res = await fetch(`http://168.231.102.215:5000/api/rc/${rcNumber}`); // apna backend endpoint
+  const res = await fetch(`https://api.vahansolution.co.in/api/rc/${rcNumber}`); // apna backend endpoint
   if (!res.ok) {
 
   const errorData = await res.json().catch(() => ({
@@ -33,25 +34,9 @@ const fetchRCDetails = async (rcNumber) => {
 };
 
 // ✅ Recursive renderer function
-const renderObject = (obj, level = 0) => {
-  if (!obj || typeof obj !== "object") return null;
-
-  return Object.entries(obj).map(([key, value]) => {
-    if (typeof value === "object" && value !== null) {
-      return (
-        <div key={key} style={{ marginLeft: level * 15 }}>
-          <Paragraph strong className="text-black">{key}:</Paragraph>
-          {renderObject(value, level + 1)}
-        </div>
-      );
-    }
-    return (
-      <Paragraph key={key} className="text-black" style={{ marginLeft: level * 15 }}>
-        <strong>{key}</strong>: {String(value)}
-      </Paragraph>
-    );
-  });
-};
+// const renderObject = (data) => {
+  
+// };
 
 const RCFetch = () => {
   const navigate = useNavigate();
@@ -88,7 +73,7 @@ const RCFetch = () => {
       </header>
 
       {/* Content */}
-      <div className="mt-[55px] flex-1 overflow-y-auto p-4 pb-8">
+      <div className="mt-[55px] flex-1 overflow-y-auto   ">
         {/* RC Input */}
         <section className="mb-4">
           <Input
@@ -108,12 +93,9 @@ const RCFetch = () => {
             <Skeleton active paragraph={{ rows: 12 }} />
           ) : (
             rcData && (
-              <Card className=" bg-red-500/50  text-white rounded-xl shadow-lg p-4">
-                <Title level={5} className="text-black">
-                  RC Details
-                </Title>
-                {renderObject(rcData)}
-              </Card>
+            
+                <RCCard data={rcData} />
+             
             )
           )}
         </section>

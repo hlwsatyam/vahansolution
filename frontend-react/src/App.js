@@ -14,6 +14,9 @@ import RCFetch from './pages/RCFetch';
 import FetchRCDetailsWithChallan from './pages/FetchRCDetailsWithChallan';
 import Challan from './pages/Challan';
 import Profile from './pages/Profile';
+import ForgotPassword from './pages/ForgotPass';
+import NETC from './pages/NETC';
+import DrivingLicense from './pages/DrivingLicense';
  
 const queryClient = new QueryClient();
 
@@ -65,7 +68,10 @@ useEffect(() => {
         <Route path="/register" element={<Register />} />
         <Route path="/fetchRCDetails" element={<RCFetch />} />
         <Route path="/FetchRCDetailsWithChallan" element={<FetchRCDetailsWithChallan />} />
+        <Route path="/forgetpassword" element={<ForgotPassword />} />
         <Route path="/Profile" element={<Profile />} />
+        <Route path="/NETC" element={<NETC />} />
+        <Route path="/dl" element={<DrivingLicense />} />
         <Route path="/Challan" element={<Challan />} />
         <Route path="/home" element={
           

@@ -17,6 +17,8 @@ const fetchServices = async () => {
         { id: 1, name: "RC Details", to:'fetchRCDetails' ,  description: "Check your vehicle RC details" },
         { id: 1, name: "RC Details With Challan", to:'FetchRCDetailsWithChallan' ,  description: "Check your vehicle RC details With challan" },
         { id: 2, name: "E-Challan", to:'Challan' ,   description: "Fetch traffic challan info" },
+        { id: 2, name: "NETC FASTag", to:'NETC' ,   description: "Fetch traffic challan info" },
+        { id: 2, name: "Driving License verification", to:'dl' ,   description: "Validate DL of users while onboarding" },
          
       ]);
     }, 1000);

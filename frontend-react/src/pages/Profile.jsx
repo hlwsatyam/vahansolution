@@ -36,7 +36,7 @@ const { Title, Paragraph, Text } = Typography;
 
 const fetchMe = async () => {
   const token = localStorage.getItem("token");
-  const res = await fetch("http://168.231.102.215:5000/api/user/me", {
+  const res = await fetch("https://api.vahansolution.co.in/api/user/me", {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token || ""}`,
@@ -51,7 +51,7 @@ const fetchMe = async () => {
 
 const updateMe = async (payload) => {
   const token = localStorage.getItem("token");
-  const res = await fetch("http://168.231.102.215:5000/api/user/me", {
+  const res = await fetch("https://api.vahansolution.co.in/api/user/me", {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -120,7 +120,7 @@ export default function Profile() {
                 bodyStyle={{ padding: 20 }}
               >
                 <div className="flex items-center gap-4">
-                  <Avatar size={72} icon={<UserOutlined />} />
+                  <Avatar size={50} style={{height:50, width:70}} icon={<UserOutlined />} />
                   <div className="flex-1">
                     <Title level={4} className="m-0">
                       {user.name}

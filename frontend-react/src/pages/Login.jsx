@@ -9,7 +9,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { motion } from "framer-motion";
 import { logo } from "../LOCAL/VARIABLE";
 
-const API_URL = "http://168.231.102.215:5000/api";
+const API_URL = "https://api.vahansolution.co.in/api";
 
 const loginUser = async (values) => {
   const res = await axios.post(`${API_URL}/login`, values);
@@ -28,7 +28,8 @@ const Login = () => {
       navigate('/home');
     },
     onError: (error) => {
-      toast.error(error?.response?.data?.error || 'Login Failed!');
+ 
+      toast.error(error?.response?.data?.message || 'Login Failed!');
     },
   });
 
@@ -65,14 +66,14 @@ const Login = () => {
           >
             <Form.Item
               name="email"
-              label="Email"
+              label="Email Or Mobile"
               rules={[
-                { required: true, type: "email", message: "Enter a valid email!" },
+                { required: true,   message: "Enter a valid email!" },
               ]}
             >
               <Input
                 prefix={<UserOutlined />}
-                placeholder="Email"
+                placeholder="Enter your email or mobile"
                 size="large"
                 className="rounded-lg border-gray-300 focus:border-red-500 focus:ring focus:ring-red-300"
               />
@@ -103,12 +104,27 @@ const Login = () => {
               </Button>
             </Form.Item>
 
-            <p className="text-center text-gray-500 mt-2">
-              Or{" "}
-              <Link to="/register" className="text-red-600 hover:underline font-medium">
-                register now!
-              </Link>
-            </p>
+            
+<p className="text-center text-gray-500">
+  Don't have an account?{' '}
+  <Link 
+    to="/register" 
+    className="text-red-600 hover:underline font-medium"
+  >
+    Register now!
+  </Link>
+</p>
+
+<p className="text-center text-gray-500 mt-2">
+  Forgot your password?{' '}
+  <Link 
+    to="/forgetpassword" 
+    className="text-red-600 hover:underline font-medium"
+  >
+    Reset here
+  </Link>
+</p>
+
              
            
           </Form>

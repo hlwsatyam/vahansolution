@@ -69,10 +69,21 @@ const varificationAuthMail = async (to, user, verifyLink) => {
 
 
 
+const forpass = async (email, otp) => {
+ 
+
+  const mailOptions = {
+    from: `"Vahan Solution" <${process.env.SMTP_USER}>`,
+    to: email,
+    subject: "Your OTP for Password Reset",
+    html: `<p>Your OTP for password reset is <b>${otp}</b>. It is valid for 10 minutes.</p>`,
+  };
+
+  await transporter.sendMail(mailOptions);
+};
 
 
 
 
 
-
-module.exports = { varificationAuthMail };
+module.exports = {forpass, varificationAuthMail };

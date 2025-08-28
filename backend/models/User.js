@@ -11,9 +11,22 @@ const userSchema = new mongoose.Schema(
       type: String, 
       required: true, 
       unique: true, 
-      lowercase: true, 
+      lowercase: true,  
       trim: true 
     },
+    mobile: { 
+      type: String, 
+      required: true, 
+      unique: true, 
+      lowercase: true,  
+      trim: true  
+    },
+
+        // Password reset fields
+    resetOtp: { type: String }, // store the OTP (optional: hash for security)
+    resetOtpExpire: { type: Date }, // expiration timestamp
+
+
     password: { 
       type: String, 
       required: true,
