@@ -5,14 +5,7 @@ const router = express.Router();
 const WalletTransaction = require("../models/WalletTransaction");
 const User = require("../models/User");
 // const fetch = require("node-fetch"); // Uncomment if needed
-
-// 🔑 Replace with your actual Cashfree credentials
-const CASHFREE_APP_ID = process.env.CASHFREE_APP_ID || 'your_app_id_here';
-const CASHFREE_SECRET_KEY = process.env.CASHFREE_SECRET_KEY || 'your_secret_key_here';
-const CASHFREE_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? "https://api.cashfree.com/pg/orders" 
-  : "https://sandbox.cashfree.com/pg/orders";
-
+ 
 // ✅ Create an order for adding money 
 router.post("/add-funds", async (req, res) => {
   try {
