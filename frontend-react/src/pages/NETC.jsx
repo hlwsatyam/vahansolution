@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
 
-const ForgotPassword = () => {
+const LoadURL = () => {
   const navigate = useNavigate();
 
   return (
@@ -24,14 +24,14 @@ const ForgotPassword = () => {
 
       {/* Iframe / Website Embed */}
       <div className="flex-1 mt-[55px]">
-        <iframe
-          src="https://monthlypass.ihmcl.co.in/"
-          title="NETC FASTag"
-          className="w-full h-full border-0"
-        ></iframe>
+   <iframe
+  src="http://localhost:5000/proxy/netc-fastag"
+  title="NETC FASTag"
+  className="w-full h-full border-0"
+></iframe>
       </div>
     </div>
   );
 };
 
-export default ForgotPassword;
+export default LoadURL;

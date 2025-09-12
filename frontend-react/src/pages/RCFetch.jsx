@@ -1,23 +1,31 @@
  
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Typography, Card, Button, Input, Skeleton } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import {
-  CarOutlined,
-  FileTextOutlined,
-  SafetyCertificateOutlined,
+  
   ArrowLeftOutlined,
 } from "@ant-design/icons";
 import RCCard from "../components/RCCard";
 
 const { Title, Paragraph } = Typography;
 
-// ✅ Backend se fetch karna
+ 
 const fetchRCDetails = async (rcNumber) => {
-  const res = await fetch(`https://api.vahansolution.co.in/api/rc/${rcNumber}`); // apna backend endpoint
+     if (!rcNumber) {
+      toast.error("RC Number (user) not provided in URL!");
+      throw new Error("RC Number not provided");
+    }
+    const params = new URLSearchParams(window.location.search);
+    const user = params.get("user");
+     if (!user) {
+      toast.error(" (user) not provided in URL!");
+      throw new Error("  user not provided");
+    }
+  const res = await fetch(`http://localhost:5000/api/rc/${rcNumber}/${user}`); // apna backend endpoint
   if (!res.ok) {
 
   const errorData = await res.json().catch(() => ({
@@ -38,7 +46,7 @@ const fetchRCDetails = async (rcNumber) => {
   
 // };
 
-const RCFetch = () => {
+const RCFetch = ({refetch}) => {
   const navigate = useNavigate();
   const [rcNumber, setRCNumber] = useState("");
   const [submittedRC, setSubmittedRC] = useState("");
@@ -52,6 +60,10 @@ const RCFetch = () => {
     onError: (d) => toast.error( d.response.data.message ||  "Failed to fetch RC details"),
     onSuccess: () => toast.success("RC details fetched successfully"),
   });
+
+
+  useEffect(()=>{refetch()},[isLoading])
+
 
   const handleFetchRC = () => {
     if (!rcNumber) return toast.error("Please enter RC number");

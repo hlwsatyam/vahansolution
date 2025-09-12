@@ -12,6 +12,12 @@ router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);
 
 
+
+
+
+
+
+
 router.get("/user/me", auth, getMe);
 router.patch("/user/me", auth, updateMe);
 

@@ -18,7 +18,7 @@ const { Title, Paragraph } = Typography;
 const fetchDrivingLicenseDetails = async (licenseData) => {
   const { licenseNumber, dob } = licenseData;
   
-  const res = await fetch("https://api.vahansolution.co.in/api/rc/driving-license", {
+  const res = await fetch("http://localhost:5000/api/rc/driving-license", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

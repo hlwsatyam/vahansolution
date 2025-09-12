@@ -34,11 +34,28 @@ const varificationAuthMail = async (to, user, verifyLink) => {
             Thank you for signing up! To complete your registration, please verify your account by clicking the button below.
           </p>
           
-          <div style="text-align: center; margin: 25px 0;">
-            <a href="${verifyLink}" target="_blank" style="background: #2563eb; color: #fff; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; font-weight: bold; display: inline-block;">
-              ✅ Verify Account
-            </a>
-          </div>
+      <div style="display: flex; justify-content: center; margin: 25px 0;">
+  <a href="${verifyLink}" target="_blank" 
+     style="background: #2563eb; 
+            color: #fff; 
+            text-decoration: none; 
+            padding: 12px 24px; 
+            border-radius: 8px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            display: inline-block;
+            text-align: center;">
+    ✅ Verify Account
+  </a>
+</div>
+
+<p style="text-align: center; font-size: 14px; color: #555; margin-top: 10px;">
+  If the button doesn’t work, copy and paste this link into your browser:<br>
+  <a href="${verifyLink}" target="_blank" style="color: #2563eb; word-break: break-all;">
+    ${verifyLink}
+  </a>
+</p>
+
 
           <p style="font-size: 14px; margin: 8px 0;">
             ⚠️ This link will expire in <strong>1 hour</strong>. If you did not create an account, you can safely ignore this email.

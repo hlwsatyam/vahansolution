@@ -3,26 +3,36 @@ const RC = require("../models/rc");
 const rcwithchallan = require("../models/rcwithchallan.js");
 const challan = require("../models/challan.js");
 const DrivingLicense = require("../models/drivingLicense");
-exports.getRCDetails = async (req, ress) => {
-  try {
-    let { rcNumber } = req.params;
+const User = require("../models/User.js");
+const WalletTransaction = require("../models/WalletTransaction.js");
 
 
-      rcNumber = rcNumber
-      .toUpperCase()   // sabko capital
-      .replace(/\s+/g, "") // beech ke space remove
-      .trim(); // starting aur ending space remove
 
-    // 1. Check agar DB me already hai
-    let rcData = await RC.findOne({ rcNumber });
+// exports.getRCDetails = async (req, ress) => {
+//   try {
+//     let { rcNumber,  user: userId } = req.params;
 
-    if (rcData) {
-      console.log("Returning data from DB...");
-      return ress.json(rcData.data); // DB ka data return
-    }
 
-    // 2. Agar DB me nahi hai to API se fetch karo
-    console.log("Fetching new data from external API...");
+//       rcNumber = rcNumber
+//       .toUpperCase()   // sabko capital
+//       .replace(/\s+/g, "") // beech ke space remove
+//       .trim(); // starting aur ending space remove
+
+//     // 1. Check agar DB me already hai
+//     let rcData = await RC.findOne({ rcNumber });
+
+//     if (rcData) {
+//       console.log("Returning data from DB...");
+//       return ress.json(rcData.data); // DB ka data return
+//     }
+
+//        const user = await User.findById(userId);
+//     if (!user) return res.status(404).json({ message: "User not found" });
+
+//     // Check if wallet has enough balance
+//     if (user.wallet_point < 8) {
+//       return res.status(400).json({ message: "Insufficient wallet balance" });
+//     }
 
     
 
@@ -30,64 +40,178 @@ exports.getRCDetails = async (req, ress) => {
 
 
 
-let responsiveAPI;
+// let responsiveAPI;
 
 
 
-  const res = await fetch("https://api.gridlines.io/rc-api/fetch-detailed", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+//   const res = await fetch("https://api.gridlines.io/rc-api/fetch-detailed", {
+//     method: "POST",
+//     headers: {
+//       Accept: "application/json",
+//       "Content-Type": "application/json",
       
-      "X-API-Key": "d9M9chG1Fhdzlh1ie7069nzAC5m6EIzA",
-      "X-Auth-Type": "API-Key",
-      "X-Reference-ID": "xxxx",
-    },
-    body: JSON.stringify({ rc_number: rcNumber, consent: "Y" }),
-  });
+//       "X-API-Key": "d9M9chG1Fhdzlh1ie7069nzAC5m6EIzA",
+//       "X-Auth-Type": "API-Key",
+//       "X-Reference-ID": "xxxx",
+//     },
+//     body: JSON.stringify({ rc_number: rcNumber, consent: "Y" }),
+//   });
 
-  if (!res.ok) {
-       console.log(res)
-        return    ress.status(500).json({ message:  "Gridline API Down" });
-    const resggg = await fetch(
-      "https://stoplight.io/mocks/gridlines/gridlines-api-docs/133154724/rc-api/fetch-detailed",
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "X-API-Key": "test-credential-396015679557935104",
+//   if (!res.ok) {
+//        console.log(res)
+//         return    ress.status(500).json({ message:  "Gridline API Down" });
+//     const resggg = await fetch(
+//       "https://stoplight.io/mocks/gridlines/gridlines-api-docs/133154724/rc-api/fetch-detailed",
+//       {
+//         method: "POST",
+//         headers: {
+//           Accept: "application/json",
+//           "Content-Type": "application/json",
+//           "X-API-Key": "test-credential-396015679557935104",
 
-          "X-Auth-Type": "API-Key",
-          "X-Reference-ID": "",
-        },
-        body: JSON.stringify({ rc_number: rcNumber, consent: "Y" }),
-      }
-    );
+//           "X-Auth-Type": "API-Key",
+//           "X-Reference-ID": "",
+//         },
+//         body: JSON.stringify({ rc_number: rcNumber, consent: "Y" }),
+//       }
+//     );
 
-      responsiveAPI = await resggg.json();
+//       responsiveAPI = await resggg.json();
    
-  }else{
-      responsiveAPI = await res.json();
-  }
+//   }else{
+//       responsiveAPI = await res.json();
+//   }
 
-  console.log(responsiveAPI)
+//   console.log(responsiveAPI)
 
-    // 3. DB me save karo
-    rcData = new RC({
-      rcNumber,
-      data: responsiveAPI,
+//     // 3. DB me save karo
+//     rcData = new RC({
+//       rcNumber,
+//       data: responsiveAPI,
+//     });
+//     await rcData.save();
+
+//     return ress.json(responsiveAPI);
+
+//   } catch (error) {
+//     console.error("Error fetching RC details:", error.message);
+//     ress.status(500).json({ message: error.message || "Something went wrong" });
+//   }
+// };
+
+
+
+
+
+
+
+exports.getRCDetails = async (req, res) => {
+  try {
+    let { rcNumber, user: userId } = req.params;
+ 
+    // Clean RC number
+    rcNumber = rcNumber.toUpperCase().replace(/\s+/g, "").trim();
+
+    // Fetch user
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // Check if wallet has enough balance
+    if (user.wallet_point < 8) {
+      return res.status(400).json({ message: "Insufficient wallet balance" });
+    }
+
+    // 1. Check if RC is in DB
+    let rcData = await RC.findOne({ rcNumber });
+    if (rcData) {
+      console.log("Returning data from DB...");
+      
+      // Deduct ₹8 and create wallet transaction
+      user.wallet_point -= 8;
+      await user.save();
+
+      await WalletTransaction.create({
+        user: user._id,
+        amount: 8,
+        type: "DEBIT",
+        reason: `RC Fetch - ${rcNumber}`,
+        status: "SUCCESS",
+        orderId: `RC-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      });
+
+      return res.json(rcData.data);
+    }
+
+    // 2. Fetch from external API
+    console.log("Fetching new data from external API...");
+    let responsiveAPI;
+
+    const apiRes = await fetch("https://api.gridlines.io/rc-api/fetch-detailed", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "X-API-Key": "d9M9chG1Fhdzlh1ie7069nzAC5m6EIzA",
+        "X-Auth-Type": "API-Key",
+        "X-Reference-ID": "xxxx",
+      },
+      body: JSON.stringify({ rc_number: rcNumber, consent: "Y" }),
     });
+
+    if (!apiRes.ok) {
+      // fallback mock API
+      const fallbackRes = await fetch(
+        "https://stoplight.io/mocks/gridlines/gridlines-api-docs/133154724/rc-api/fetch-detailed",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "X-API-Key": "test-credential-396015679557935104",
+            "X-Auth-Type": "API-Key",
+            "X-Reference-ID": "",
+          },
+          body: JSON.stringify({ rc_number: rcNumber, consent: "Y" }),
+        }
+      );
+      responsiveAPI = await fallbackRes.json();
+    } else {
+       user.wallet_point -= 8;
+    await user.save();
+
+    await WalletTransaction.create({
+      user: user._id,
+      amount: 8,
+      type: "DEBIT",
+      reason: `RC Fetch - ${rcNumber}`,
+      status: "SUCCESS",
+      orderId: `RC-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+    });
+      responsiveAPI = await apiRes.json();
+    }
+
+   
+
+    // 3. Save RC data to DB
+    rcData = new RC({ rcNumber, data: responsiveAPI });
     await rcData.save();
 
-    return ress.json(responsiveAPI);
+    // 4. Deduct ₹8 and create wallet transaction
+   
 
+    return res.json(responsiveAPI);
   } catch (error) {
     console.error("Error fetching RC details:", error.message);
-    ress.status(500).json({ message: error.message || "Something went wrong" });
+    res.status(500).json({ message: error.message || "Something went wrong" });
   }
 };
+
+
+
+
+
+
+
 exports.getRCWithChallanDetails = async (req, ress) => {
   try {
     let { rcNumber } = req.params;

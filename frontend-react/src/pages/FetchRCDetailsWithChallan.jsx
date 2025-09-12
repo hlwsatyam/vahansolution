@@ -17,7 +17,7 @@ const { Title, Paragraph } = Typography;
 
 // ✅ Backend se fetch karna
 const fetchRCDetails = async (rcNumber) => {
-  const res = await fetch(`https://api.vahansolution.co.in/api/rc/rcwithchallan/${rcNumber}`); // apna backend endpoint
+  const res = await fetch(`http://localhost:5000/api/rc/rcwithchallan/${rcNumber}`); // apna backend endpoint
   if (!res.ok) {
 
   const errorData = await res.json().catch(() => ({

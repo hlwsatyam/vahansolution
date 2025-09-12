@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
-const API_URL = "https://api.vahansolution.co.in/api";
+const API_URL = "http://localhost:5000/api";
 
 const ForgotPassword = () => {
   const [step, setStep] = useState(1);

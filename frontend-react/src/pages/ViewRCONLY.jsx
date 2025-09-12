@@ -13,7 +13,7 @@ import {
   BankOutlined,
   SafetyCertificateOutlined,
   ArrowLeftOutlined,
-  ReloadOutlined,
+
   SyncOutlined,
 } from "@ant-design/icons";
 import html2canvas from "html2canvas";
@@ -23,7 +23,7 @@ import { mlogo } from "../LOCAL/VARIABLE";
 
 const { Title, Text } = Typography;
 
-const RCCard = ({ data }) => {
+const ViewRCONLY = ({ data }) => {
   const cardRef = useRef();
  console.log(data)
   const handleShare = async () => {
@@ -79,7 +79,7 @@ const RCCard = ({ data }) => {
   };
 
   const InfoRow = ({ label, value, isBlue = true }) => (
-    <Row className="mb-2 min-h-[32px] items-center    pb-2">
+    <Row className="mb-2 min-h-[32px] items-center border-b border-gray-100 pb-2">
       <Col>
         <Text className="text-[12px] font-medium text-gray-700">{label}</Text>
       </Col>
@@ -109,7 +109,7 @@ const RCCard = ({ data }) => {
  <div
       className="flex items-center justify-between w-full px-4"
       style={{
-        height: 66,
+        height: 40,
      
         color: "black",
       }}
@@ -125,9 +125,8 @@ const RCCard = ({ data }) => {
           style={{ width: 40, height: 40, borderRadius: "50%", marginBottom: 2 }}
         />
         <div>
-             <div  className="" style={{ fontWeight: "lighter", fontSize: 15 }}>NextGen</div>
-        <div className="font-bold" style={{ fontSize: 22 }}>mParivahan</div>  
-        <div className="font-extralight my-[0.5px]" style={{ fontSize: 8 }}>One Stop transport solution for citizen</div>  
+             <div style={{ fontWeight: "lighter", fontSize: 16 }}>NextGen</div>
+        <div className="font-bold" style={{ fontSize: 12 }}>mParivahan</div>  
         </div>
    
       </div>
@@ -138,17 +137,13 @@ const RCCard = ({ data }) => {
 
 
 
-      <div ref={cardRef} className="w-full my-4 rounded-t-[150px]  max-w-lg bg-transparent ">
+      <div ref={cardRef} className="w-full rounded-t-[150px]  max-w-lg bg-transparent ">
         <Card
-        bodyStyle={{ padding: 0 }}
-  style={{
-    borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
-    overflow: "hidden", // ensures content respects rounded corners
-  }}
+          
+          bodyStyle={{ padding: 0 }}
         >
           {/* Header with QR Code */}
-          <div className="bg-  p-6    -b border-gray-200">
+          <div className="bg-  p-6   -b border-gray-200">
             <div className="text-left mb-4">
               <Text className="text-lg font-semibold text-gray-800">
                 Virtual RC
@@ -245,13 +240,6 @@ const RCCard = ({ data }) => {
                   <InfoRow
                     label="Color"
                     value={data?.data?.rc_data.vehicle_data.color}
-                    isBlue={true}
-                  />
-                )}
-                {data?.data?.rc_data?.vehicle_data?.gross_weight && (
-                  <InfoRow
-                    label="GVW"
-                    value={data?.data?.rc_data.vehicle_data.gross_weight}
                     isBlue={true}
                   />
                 )}
@@ -383,4 +371,4 @@ const RCCard = ({ data }) => {
   );
 };
 
-export default RCCard;
+export default ViewRCONLY;

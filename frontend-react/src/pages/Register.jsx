@@ -1,6 +1,6 @@
 // src/pages/Register.jsx
 import React from "react";
-import { Form, Input, Button, Skeleton } from "antd";
+import { Form, Input, Button, Skeleton, Checkbox } from "antd";
 import { UserOutlined, LockOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import axios from "axios";
 import { logo } from "../LOCAL/VARIABLE";
 
-const API_URL = "https://api.vahansolution.co.in/api";
+const API_URL = "http://localhost:5000/api";
 
 const registerUser = async (values) => {
   const res = await axios.post(`${API_URL}/register`, values);
@@ -125,6 +125,40 @@ const Register = () => {
                 className="rounded-lg border-gray-300 focus:border-red-500 focus:ring focus:ring-red-300"
               />
             </Form.Item>
+
+
+
+ 
+      {/* Terms & Conditions Checkbox */}
+      <div className="flex items-center justify-center mb-2">
+        <Checkbox
+          
+        >
+          I agree to the{" "}
+          <span
+            className="text-blue-600 hover:underline cursor-pointer"
+            onClick={() => navigate("/terms")}
+          >
+            Terms
+          </span>{" "}
+          and{" "}
+          <span
+            className="text-blue-600 hover:underline cursor-pointer"
+            onClick={() => navigate("/privacy")}
+          >
+            Privacy Policy
+          </span>
+        </Checkbox>
+      </div>
+
+
+
+
+
+
+
+
+
 
             <Form.Item>
               <Button

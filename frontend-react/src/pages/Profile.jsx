@@ -31,12 +31,13 @@ import toast from "react-hot-toast";
 // Reuse your existing components
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import SettingsPage from "./ListSetting";
 
 const { Title, Paragraph, Text } = Typography;
 
 const fetchMe = async () => {
   const token = localStorage.getItem("token");
-  const res = await fetch("https://api.vahansolution.co.in/api/user/me", {
+  const res = await fetch("http://localhost:5000/api/user/me", {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token || ""}`,
@@ -51,7 +52,7 @@ const fetchMe = async () => {
 
 const updateMe = async (payload) => {
   const token = localStorage.getItem("token");
-  const res = await fetch("https://api.vahansolution.co.in/api/user/me", {
+  const res = await fetch("http://localhost:5000/api/user/me", {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -92,10 +93,6 @@ export default function Profile() {
     onError: (e) => toast.error(e.message),
   });
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
-  };
 
   const initialName = useMemo(() => user?.name || "", [user]);
   const joined = useMemo(
@@ -106,7 +103,7 @@ export default function Profile() {
   return (
     <div className="flex flex-col h-screen bg-gray-50">
       {/* Header (you can reuse your existing Header component) */}
-      <Header />
+      <Header user={user}  />
 
       {/* Content */}
       <main className="flex-1 overflow-y-auto px-4 pb-[80px] pt-[70px]">
@@ -120,7 +117,7 @@ export default function Profile() {
                 bodyStyle={{ padding: 20 }}
               >
                 <div className="flex items-center gap-4">
-                  <Avatar size={50} style={{height:50, width:70}} icon={<UserOutlined />} />
+                
                   <div className="flex-1">
                     <Title level={4} className="m-0">
                       {user.name}
@@ -207,7 +204,7 @@ export default function Profile() {
                 </Descriptions>
 
                 <Divider />
-
+<SettingsPage/>
                 <Paragraph type="secondary">
                   Keep your profile updated.
                 </Paragraph>

@@ -1,14 +1,17 @@
 import React, { useRef } from "react";
-import { Card, Typography, Button, Divider, Row, Col, Avatar, Tag } from "antd";
+import { Card, Typography, Button, Row, Col, Space, Divider } from "antd";
 import {
+  IdcardOutlined,
   UserOutlined,
   CalendarOutlined,
   HomeOutlined,
   EnvironmentOutlined,
   CarOutlined,
   ShareAltOutlined,
-  SafetyCertificateOutlined,
   FileTextOutlined,
+  QrcodeOutlined,
+  BankOutlined,
+  SafetyCertificateOutlined,
 } from "@ant-design/icons";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -16,9 +19,9 @@ import { QRCodeCanvas } from "qrcode.react";
 
 const { Title, Text } = Typography;
 
-const RCCWithChallanCard = ({ data }) => {
+const RCCard = ({ data }) => {
   const cardRef = useRef();
-
+console.log(data)
   const handleShare = async () => {
     const element = cardRef.current;
     const canvas = await html2canvas(element, {
@@ -48,174 +51,348 @@ const RCCWithChallanCard = ({ data }) => {
       heightLeft -= pdf.internal.pageSize.getHeight();
     }
 
-    pdf.save("rc_challan_card.pdf");
+    pdf.save("rc_card.pdf");
   };
 
   const rc = data?.data?.rc_data || {};
   const owner = rc.owner_data || {};
-  const challans = data?.data?.challan_data || [];
 
   const GenerateQRCode = () => {
     const currentUrl = window.location.href;
     return (
-      <div className="qr-code-placeholder bg-white p-2 rounded-2xl shadow-lg flex flex-col items-center justify-center">
-        <QRCodeCanvas value={currentUrl} size={100} level="H" includeMargin={true} />
-        <p className="mt-1 text-[10px] text-gray-600 truncate max-w-[100px] text-center">
-          {currentUrl}
-        </p>
+      <div className="flex flex-col items-center justify-center bg-white p-3 rounded-lg shadow-sm border">
+        <QRCodeCanvas
+          value={currentUrl}
+          size={80}
+          bgColor="#ffffff"
+          fgColor="#000000"
+          level="H"
+          includeMargin={false}
+        />
+        <Text className="text-xs text-center mt-2 font-bold">WB02AL2885</Text>
       </div>
     );
   };
 
+  const InfoRow = ({ label, value, isBlue = true }) => (
+    <Row className="mb-2 min-h-[32px] items-center border-b border-gray-100 pb-2">
+      <Col>
+        <Text className="text-sm font-medium text-gray-700">{label}</Text>
+      </Col>
+      <Col className="ml-auto">
+        <Text
+          className={`text-sm font-medium ${
+            isBlue ? "text-blue-400" : "text-gray-900"
+          }`}
+        >
+          {value || "N/A"}
+        </Text>
+      </Col>
+    </Row>
+  );
+
   return (
-    <div className="flex justify-center ">
-      <Card
-        ref={cardRef}
-        className="w-full max-w-3xl shadow-2xl rounded-2xl border-0 bg-gradient-to-br from-indigo-50 via-white to-indigo-50 overflow-hidden"
-        bodyStyle={{ padding: 0 }}
-      >
-        {/* Header */}
-        <div className="bg-gradient-to-r from-indigo-700 to-indigo-900 text-white p-5 flex justify-between items-center">
-          <GenerateQRCode />
-          <div className="text-right">
-            <Avatar size={96} icon={<UserOutlined />} className="border-4 border-white" />
-            <Title level={3} className="!text-white m-0 mt-2">
-              {owner.name}
-            </Title>
-            <Text className="text-indigo-200">{rc.document_type}</Text>
-          </div>
-        </div>
+    <div className="flex justify-center p-4 bg-gray-50 min-h-screen">
+      <div ref={cardRef} className="w-full max-w-lg bg-white">
+        <Card
+          className="shadow-lg rounded-lg border border-gray-200"
+          bodyStyle={{ padding: 0 }}
+        >
+          {/* Header with QR Code */}
+          <div className="bg-white p-6 border-b border-gray-200">
+            <div className="text-left mb-4">
+              <Text className="text-lg font-semibold text-gray-800">
+                Virtual RC
+              </Text>
+            </div>
 
-        {/* RC Details */}
-        <div className="p-5">
-          <Row gutter={[16, 16]} className="mb-4">
-            <Col xs={12}>
-              <div className="bg-indigo-50 p-3 rounded-xl">
-                <Text strong className="text-indigo-700 flex items-center">
-                  <UserOutlined className="mr-2" /> Father Name
-                </Text>
-                <p className="m-0 mt-1 font-medium">{owner.father_name}</p>
-              </div>
-            </Col>
-            <Col xs={12}>
-              <div className="bg-indigo-50 p-3 rounded-xl">
-                <Text strong className="text-indigo-700 flex items-center">
-                  <HomeOutlined className="mr-2" /> Present Address
-                </Text>
-                <p className="m-0 mt-1 font-medium">{owner.present_address}</p>
-              </div>
-            </Col>
-            <Col xs={12}>
-              <div className="bg-indigo-50 p-3 rounded-xl">
-                <Text strong className="text-indigo-700 flex items-center">
-                  <HomeOutlined className="mr-2" /> Permanent Address
-                </Text>
-                <p className="m-0 mt-1 font-medium">{owner.permanent_address}</p>
-              </div>
-            </Col>
-            <Col xs={12}>
-              <div className="bg-indigo-50 p-3 rounded-xl">
-                <Text strong className="text-indigo-700 flex items-center">
-                  <CalendarOutlined className="mr-2" /> Issue Date
-                </Text>
-                <p className="m-0 mt-1 font-medium">{rc.issue_date}</p>
-              </div>
-            </Col>
-            <Col xs={12}>
-              <div className="bg-indigo-50 p-3 rounded-xl">
-                <Text strong className="text-indigo-700 flex items-center">
-                  <CalendarOutlined className="mr-2" /> Expiry Date
-                </Text>
-                <p className="m-0 mt-1 font-medium">{rc.expiry_date}</p>
-              </div>
-            </Col>
-          </Row>
-
-          {/* Vehicle Details */}
-          <div className="mb-4">
-            <Title level={5} className="flex items-center text-indigo-800">
-              <CarOutlined className="mr-2" /> Vehicle Details
-            </Title>
-            <Row gutter={[16, 16]}>
-              {Object.entries(rc.vehicle_data || {}).map(([key, value]) => (
-                <Col xs={12} key={key}>
-                  <div className="bg-indigo-50 p-2 rounded-xl">
-                    <Text strong className="text-indigo-700 capitalize">{key.replace(/_/g, ' ')}</Text>
-                    <p className="m-0 mt-1 font-medium">{value?.toString()}</p>
-                  </div>
-                </Col>
-              ))}
-            </Row>
+            <div className="flex justify-center mb-4">
+              <GenerateQRCode />
+            </div>
           </div>
 
-          {/* Insurance / Norms */}
-          {rc.insurance_data && (
-            <div className="mb-4">
-              <Text strong className="text-indigo-700 flex items-center">
-                <SafetyCertificateOutlined className="mr-2" /> Insurance Details
-              </Text>
-              {Object.entries(rc.insurance_data).map(([key, value]) => (
-                <p key={key} className="m-0 ml-5 text-sm">
-                  {key.replace(/_/g, ' ')}: {value?.toString()}
-                </p>
-              ))}
+          {/* Owner Details Section */}
+          <div className="px-6 py-4">
+            <div className="mb-6">
+              <div className="flex justify-between items-center mb-4">
+                <Title level={5} className="text-gray-800 font-semibold mb-0">
+                  Owner Details
+                </Title>
+                <Text className="text-blue-600 text-sm font-medium">
+                {data?.data?.rc_data?.owner_data?.name}
+                </Text>
+              </div>
+
+              <InfoRow
+                label="Son / Daughter / Wife of"
+                value={data?.data?.rc_data?.owner_data?.father_name}
+                isBlue={true}
+              />
             </div>
-          )}
-          {rc.norms_type && (
-            <div className="mb-4">
-              <Text strong className="text-indigo-700 flex items-center">
-                <FileTextOutlined className="mr-2" /> Norms Type
-              </Text>
-              <p className="m-0 ml-5 text-sm">{rc.norms_type}</p>
-            </div>
+            <Divider />
+            {/* Vehicle Information */}
+            <div className="mb-6">
+              <div className="mb-6">
+                {data?.data?.rc_data?.vehicle_data?.chassis_number && (
+                  <InfoRow
+                    label="Chassis No."
+                    value={data?.data?.rc_data.vehicle_data.chassis_number}
+                    isBlue={true}
+                  />
+                )}
+                {data?.data?.rc_data?.vehicle_data?.engine_number && (
+                  <InfoRow
+                    label="Engine No."
+                    value={data?.data?.rc_data.vehicle_data.engine_number}
+                  />
+                )}
+                {data?.data?.rc_data?.vehicle_data?.maker_description && (
+                  <InfoRow
+                    label="Maker Name"
+                    value={data?.data?.rc_data.vehicle_data.maker_description}
+                    isBlue={true}
+                  />
+                )}
+                
+ 
+
+
+
+
+
+
+
+{Array.isArray(data?.data?.challan_data) && (
+  <div>
+    {data.data.challan_data.map((d, index) => (
+      <div key={index} className="mb-4 border-b pb-2">
+        {d.document_id && (
+          <InfoRow label="Document ID" value={d.document_id} isBlue />
+        )}
+        {d.status && <InfoRow label="Status" value={d.status} />}
+        {d.area_name && (
+          <InfoRow label="Area" value={d.area_name} isBlue />
+        )}
+        {d.date_issued && (
+          <InfoRow label="Date Issued" value={d.date_issued} />
+        )}
+        {d.accused_name && (
+          <InfoRow label="Accused Name" value={d.accused_name} isBlue />
+        )}
+        {d.owner_name && (
+          <InfoRow label="Owner Name" value={d.owner_name} />
+        )}
+        {d.amount && (
+          <InfoRow label="Amount" value={`₹${d.amount}`} isBlue />
+        )}
+        {d.rto_name && (
+          <InfoRow label="RTO Name" value={d.rto_name} />
+        )}
+        {d.state && <InfoRow label="State" value={d.state} isBlue />}
+
+        {/* Offence Data */}
+        {Array.isArray(d.offence_data) &&
+          d.offence_data.map((o, i) =>
+            o.offence_description ? (
+              <InfoRow
+                key={i}
+                label={`Offence (${o.offence_id || i + 1})`}
+                value={o.offence_description}
+              />
+            ) : null
           )}
 
-          {/* Challan Section */}
-          {challans.length > 0 && (
-            <div className="mb-4">
-              <Title level={5} className="flex items-center text-red-700">
-                <FileTextOutlined className="mr-2" /> Challan Details
-              </Title>
-              {challans.map((ch, index) => (
-                <div key={index} className="bg-red-50 p-3 rounded-xl mb-2 border-l-4 border-red-500">
-                  <Text strong>Challan ID: {ch.document_id}</Text>
-                  <p className="m-0 text-sm">Status: {ch.status}</p>
-                  <p className="m-0 text-sm">Area: {ch.area_name}</p>
-                  <p className="m-0 text-sm">RTO: {ch.rto_name}</p>
-                  <p className="m-0 text-sm">Accused: {ch.accused_name}</p>
-                  <p className="m-0 text-sm">Owner: {ch.owner_name}</p>
-                  <p className="m-0 text-sm">Date Issued: {ch.date_issued}</p>
-                  <p className="m-0 text-sm">Amount: ₹{ch.amount}</p>
-                  {ch.offence_data?.map((o, i) => (
-                    <p key={i} className="m-0 text-sm ml-5">
-                      Offence: {o.offence_description}
-                    </p>
-                  ))}
-                  {ch.receipt_url && (
-                    <a href={ch.receipt_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline text-sm">
-                      View Receipt
-                    </a>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        {/* Receipt URL */}
+        {d.receipt_url && (
+          <InfoRow
+            label="Receipt"
+            value={
+              d.receipt_url
+            
+            }
+          />
+        )}
+      </div>
+    ))}
+  </div>
+)}
 
-        {/* Footer */}
-        <div className="bg-gray-50 p-4 border-t border-gray-200">
-          <Button
-            type="primary"
-            icon={<ShareAltOutlined />}
-            onClick={handleShare}
-            className="w-full rounded-xl h-12 bg-gradient-to-r from-red-600 to-red-800 border-0 shadow-md font-bold"
-          >
-            Export / Share RC + Challan
-          </Button>
-        </div>
-      </Card>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                {data?.data?.rc_data?.issue_date && (
+                  <InfoRow
+                    label="Registration Date"
+                    value={data?.data?.rc_data.issue_date}
+                  />
+                )}
+                {data?.data?.rc_data?.tax_end_date && (
+                  <InfoRow
+                    label="Tax valid up to"
+                    value={data?.data?.rc_data.tax_end_date}
+                  />
+                )}
+                {data?.data?.rc_data?.vehicle_data?.category && (
+                  <InfoRow
+                    label="Vehicle Class"
+                    value={data?.data?.rc_data.vehicle_data.category}
+                  />
+                )}
+                {data?.data?.rc_data?.vehicle_data?.fuel_type && (
+                  <InfoRow
+                    label="Fuel Type"
+                    value={data?.data?.rc_data.vehicle_data.fuel_type}
+                  />
+                )}
+                {data?.data?.rc_data?.vehicle_data?.color && (
+                  <InfoRow
+                    label="Color"
+                    value={data?.data?.rc_data.vehicle_data.color}
+                    isBlue={true}
+                  />
+                )}
+                {data?.data?.rc_data?.vehicle_data?.seating_capacity && (
+                  <InfoRow
+                    label="Seat Capacity"
+                    value={data?.data?.rc_data.vehicle_data.seating_capacity}
+                  />
+                )}
+                {data?.data?.rc_data?.vehicle_data?.standing_capacity && (
+                  <InfoRow
+                    label="Standing Capacity"
+                    value={data?.data?.rc_data.vehicle_data.standing_capacity}
+                  />
+                )}
+                {data?.data?.rc_data?.financier && (
+                  <InfoRow
+                    label="Financer"
+                    value={data?.data?.rc_data.financier}
+                  />
+                )}
+                {data?.data?.rc_data?.insurance_data?.company && (
+                  <InfoRow
+                    label="Financer Company"
+                    value={data?.data?.rc_data.insurance_data.company}
+                  />
+                )}
+                {data?.data?.rc_data?.insurance_data?.policy_number && (
+                  <InfoRow
+                    label="Insurance Policy No"
+                    value={data?.data?.rc_data.insurance_data.policy_number}
+                  />
+                )}
+                {data?.data?.rc_data?.insurance_data?.expiry_date && (
+                  <InfoRow
+                    label="Insurance Valid UpTo"
+                    value={data?.data?.rc_data.insurance_data.expiry_date}
+                  />
+                )}
+                {data?.data?.rc_data?.permit_data?.expiry_date && (
+                  <InfoRow
+                    label="Fitness UpTo"
+                    value={data?.data?.rc_data.permit_data.expiry_date}
+                  />
+                )}
+                {data?.data?.rc_data?.pucc_data?.pucc_number && (
+                  <InfoRow
+                    label="PUCC No."
+                    value={data?.data?.rc_data.pucc_data.pucc_number}
+                  />
+                )}
+                {data?.data?.rc_data?.pucc_data?.expiry_date && (
+                  <InfoRow
+                    label="PUCC Valid UpTo"
+                    value={data?.data?.rc_data.pucc_data.expiry_date}
+                  />
+                )}
+                {data?.data?.rc_data?.national_permit_data?.permit_number && (
+                  <InfoRow
+                    label="National Permit No."
+                    value={
+                      data?.data?.rc_data.national_permit_data.permit_number
+                    }
+                  />
+                )}
+                {data?.data?.rc_data?.national_permit_data?.expiry_date && (
+                  <InfoRow
+                    label="National Permit Valid UpTo"
+                    value={data?.data?.rc_data.national_permit_data.expiry_date}
+                  />
+                )}
+                {data?.data?.rc_data?.permit_data?.expiry_date && (
+                  <InfoRow
+                    label="State Permit Valid UpTo"
+                    value={data?.data?.rc_data.permit_data.expiry_date}
+                  />
+                )}
+                {data?.data?.rc_data?.registered_at && (
+                  <InfoRow
+                    label="Registering Authority"
+                    value={data?.data?.rc_data.registered_at}
+                  />
+                )}
+                {data?.data?.rc_data?.blacklist_status && (
+                  <InfoRow
+                    label="Black list status"
+                    value={data?.data?.rc_data.blacklist_status}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className=" px-6 py-4 text-white">
+            <div className="text-center mb-3">
+              <Text className="text-blue-300  font-medium">
+                Tap to Check the Vehicle Impound & Seizure Document Status
+              </Text>
+            </div>
+
+            <div className="text-xs leading-relaxed">
+              <Text className="text-black block mb-2">
+                If status of pollution Certificate, Insurance, Tax etc. are not
+                available above, same may be verified from physical documents
+              </Text>
+
+              <Text className="text-black block mb-3">
+                <strong>Note:</strong> This information for the Certificate of
+                Registration is generated by mParivahan app and data provided by
+                the issuing authority in the National Register of Ministry of
+                Road Transport and Highways-1010.This document is valid as per
+                the IT Act 2000 of Ministry of Information Technology.
+              </Text>
+            </div>
+
+            <Button
+              type="primary"
+              icon={<ShareAltOutlined />}
+              onClick={handleShare}
+              className="w-full rounded-lg h-12 bg-green-500 text-white text-lg border-0 font-semibold hover:bg-gray-100 mb-3"
+            >
+              share
+            </Button>
+          </div>
+        </Card>
+      </div>
     </div>
   );
 };
 
-export default RCCWithChallanCard;
+export default RCCard;
