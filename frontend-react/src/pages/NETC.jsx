@@ -25,7 +25,7 @@ const LoadURL = () => {
       {/* Iframe / Website Embed */}
       <div className="flex-1 mt-[55px]">
    <iframe
-  src="http://localhost:5000/proxy/netc-fastag"
+  src="https://www.npci.org.in/what-we-do/netc-fastag/check-your-netc-fastag-status"
   title="NETC FASTag"
   className="w-full h-full border-0"
 ></iframe>

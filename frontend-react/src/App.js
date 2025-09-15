@@ -131,7 +131,7 @@ const fetchMe = async () => {
         <Route path="/forgetpassword" element={<ForgotPassword />} />
         <Route path="/Profile" element={<Profile />} />
         <Route path="/NETC" element={<NETC />} />
-        <Route path="/dl" element={<DrivingLicense />} />
+        <Route path="/dl"   element={<DrivingLicense   refetch={refetch}/>} />
         <Route path="/Challan" element={<Challan />} />
 
         <Route

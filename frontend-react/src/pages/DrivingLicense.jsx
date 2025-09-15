@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Typography, Card, Button, Input, Skeleton, DatePicker, Form, Row, Col, Collapse } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -17,7 +17,8 @@ const { Title, Paragraph } = Typography;
 // Backend se fetch karna
 const fetchDrivingLicenseDetails = async (licenseData) => {
   const { licenseNumber, dob } = licenseData;
-  
+    const params = new URLSearchParams(window.location.search);
+    const user = params.get("user");
   const res = await fetch("http://localhost:5000/api/rc/driving-license", {
     method: "POST",
     headers: {
@@ -27,6 +28,7 @@ const fetchDrivingLicenseDetails = async (licenseData) => {
       driving_license_number: licenseNumber,
       date_of_birth: dob,
       consent: "Y",
+      userId:user,
       source: 1
     })
   });
@@ -65,7 +67,7 @@ const fetchDrivingLicenseDetails = async (licenseData) => {
 
 
 
-const DrivingLicense = () => {
+const DrivingLicense = ({refetch}) => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [submittedData, setSubmittedData] = useState(null);
@@ -79,6 +81,10 @@ const DrivingLicense = () => {
     onError: (error) => toast.error(error.message || "Failed to fetch driving license details"),
     onSuccess: () => toast.success("Driving license details fetched successfully"),
   });
+
+
+ useEffect(()=>{refetch()},[isLoading])
+
 
   const handleFetchLicense = (values) => {
     if (!values.licenseNumber || !values.dob) {

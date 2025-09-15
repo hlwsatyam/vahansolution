@@ -8,6 +8,8 @@ import { motion } from "framer-motion";
 import {
   
   ArrowLeftOutlined,
+  FileTextOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 import RCCard from "../components/RCCard";
 
@@ -87,17 +89,27 @@ const RCFetch = ({refetch}) => {
       {/* Content */}
       <div className="mt-[55px] flex-1 overflow-y-auto   ">
         {/* RC Input */}
-        <section className="mb-4">
-          <Input
-            placeholder="Enter RC Number"
-            value={rcNumber}
-            onChange={(e) => setRCNumber(e.target.value)}
-            className="mb-2"
-          />
-          <Button type="primary" loading={isLoading} className="bg-red-500" block onClick={handleFetchRC}>
-            Fetch RC Details
-          </Button>
-        </section>
+      <div className="mb-4">
+        <Input
+          placeholder="Enter RC Number"
+          value={rcNumber}
+          onChange={(e) => setRCNumber(e.target.value)}
+          prefix={<SearchOutlined className="text-gray-400" />}
+          className="rounded-lg py-2 border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-300"
+        />
+      </div>
+
+      {/* Stylish Button with icon */}
+      <Button
+        type="primary"
+        icon={<FileTextOutlined />}
+        loading={isLoading}
+        className="bg-red-500 hover:bg-red-600 rounded-lg h-11 flex items-center justify-center font-medium text-white"
+        block
+        onClick={handleFetchRC}
+      >
+        Fetch RC Details
+      </Button>
 
         {/* RC Details */}
         <section>

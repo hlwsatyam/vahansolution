@@ -303,7 +303,7 @@ let responsiveAPI;
 
 exports.drivinglicense = async (req, res) => {
   try {
-    let { driving_license_number, date_of_birth, source, consent } = req.body;
+    let { driving_license_number,  userId, date_of_birth, source, consent } = req.body;
 
     // Validate required fields
     if (!driving_license_number || !date_of_birth || !consent) {
@@ -311,6 +311,19 @@ exports.drivinglicense = async (req, res) => {
         message: "Driving license number, date of birth, and consent are required" 
       });
     }
+
+
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // Check if wallet has enough balance
+    if (user.wallet_point < 8) {
+      return res.status(400).json({ message: "Insufficient wallet balance" });
+    }
+
+
+
 
     // Format and clean the input
     driving_license_number = driving_license_number
@@ -325,6 +338,23 @@ exports.drivinglicense = async (req, res) => {
     });
 
     if (licenseData) {
+
+
+
+    user.wallet_point -= 8;
+      await user.save();
+
+      await WalletTransaction.create({
+        user: user._id,
+        amount: 8,
+        type: "DEBIT",
+        reason: `DL Fetch - ${driving_license_number}`,
+        status: "SUCCESS",
+        orderId: `DL-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      });
+
+
+
       console.log("Returning driving license data from DB...");
       return res.json(licenseData.data);
     }
@@ -358,6 +388,28 @@ exports.drivinglicense = async (req, res) => {
     }
 
     const apiData = await apiResponse.json();
+
+
+
+
+    user.wallet_point -= 8;
+      await user.save();
+
+      await WalletTransaction.create({
+        user: user._id,
+        amount: 8,
+        type: "DEBIT",
+        reason: `DL Fetch - ${driving_license_number}`,
+        status: "SUCCESS",
+        orderId: `DL-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      });
+
+
+
+
+
+
+
 
     // Save to database
     licenseData = new DrivingLicense({
