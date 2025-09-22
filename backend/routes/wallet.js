@@ -42,7 +42,7 @@ router.post("/add-funds", async (req, res) => {
         },
         order_note: "Wallet Topup",
         order_meta: {
-          return_url: `http://localhost:5000/api/wallet/verify?order_id=${orderId}&user_id=${userId}`,
+          return_url: `https://api.vahansolution.co.in/api/wallet/verify?order_id=${orderId}&user_id=${userId}`,
           // Use your actual frontend URL in production
         },
       }),

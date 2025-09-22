@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import axios from "axios";
 import { logo } from "../LOCAL/VARIABLE";
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://api.vahansolution.co.in/api";
 
 const registerUser = async (values) => {
   const res = await axios.post(`${API_URL}/register`, values);

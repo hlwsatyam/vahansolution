@@ -37,7 +37,7 @@ const { Title, Paragraph, Text } = Typography;
 
 const fetchMe = async () => {
   const token = localStorage.getItem("token");
-  const res = await fetch("http://localhost:5000/api/user/me", {
+  const res = await fetch("https://api.vahansolution.co.in/api/user/me", {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token || ""}`,
@@ -52,7 +52,7 @@ const fetchMe = async () => {
 
 const updateMe = async (payload) => {
   const token = localStorage.getItem("token");
-  const res = await fetch("http://localhost:5000/api/user/me", {
+  const res = await fetch("https://api.vahansolution.co.in/api/user/me", {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",

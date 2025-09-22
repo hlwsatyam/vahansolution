@@ -49,7 +49,7 @@ const WalletManagementSystem = () => {
 
   // Search user query
   const searchUser = async (identifier) => {
-    const response = await axios.get(`http://localhost:5000/api/wallet/search?identifier=${identifier}`);
+    const response = await axios.get(`https://api.vahansolution.co.in/api/wallet/search?identifier=${identifier}`);
     return response.data;
   };
 
@@ -62,7 +62,7 @@ const WalletManagementSystem = () => {
 
   // Update wallet mutation
   const updateWallet = async (updateData) => {
-    const response = await axios.post('http://localhost:5000/api/wallet/update-wallet', updateData);
+    const response = await axios.post('https://api.vahansolution.co.in/api/wallet/update-wallet', updateData);
     return response.data;
   };
 
