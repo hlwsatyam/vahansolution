@@ -79,14 +79,14 @@ const RCCard = ({ data }) => {
   };
 
   const InfoRow = ({ label, value, isBlue = true }) => (
-    <Row className="mb-2 min-h-[32px] items-center    pb-2">
+    <Row className=" min-h-[32px] items-center    pb-2">
       <Col>
         <Text className="text-[12px] font-medium text-gray-700">{label}</Text>
       </Col>
       <Col className="ml-auto">
         <Text
-          className={`text-[12px] font-medium ${
-            isBlue ? "text-blue-400" : "text-gray-900"
+          className={`text-[12px]  font-bold  ${
+            isBlue ? "text-[#46bbec] " : "text-gray-900"
           }`}
         >
           {value || "N/A"}
@@ -155,15 +155,22 @@ const RCCard = ({ data }) => {
               </Text>
             </div>
 
-            <div className="flex justify-center mb- ">
+            <div className="flex justify-center  ">
               <img width={'80%'} src={mlogo} />
               
             </div>
-               <div className="flex justify-center  ">
-                  <Text className="text-xs text-center mt-2 font-extrabold">{data?.data?.rc_data?.document_id}</Text>
+               <div style={{ marginTop: "-8px", marginBottom: "18px" }}  className="flex justify-center  ">
+                  <Text    className="text-[12px] text-center mt-2 font-extrabold">{data?.data?.rc_data?.document_id}</Text>
                </div>
            
           </div>
+<div className="flex justify-center">
+  <div className="bg-sky-200/30 w-[95%] m-auto- h-2 ">
+
+</div>
+</div>
+
+
 
           {/* Owner Details Section */}
           <div className="px-6 py-4">
@@ -172,16 +179,20 @@ const RCCard = ({ data }) => {
                 <Title level={5} className="text-gray-800 font-semibold mb-0">
                   Owner Details
                 </Title>
-                <Text className="text-blue-600 text-sm font-medium">
-                {data?.data?.rc_data?.owner_data?.name}
-                </Text>
-              </div>
+               
 
+              </div>
+ <InfoRow
+                label="Name"
+                value={data?.data?.rc_data?.owner_data?.name}
+                isBlue={true}
+              />
               <InfoRow
                 label="Son / Daughter / Wife of"
                 value={data?.data?.rc_data?.owner_data?.father_name}
                 isBlue={true}
               />
+             
             </div>
          
             {/* Vehicle Information */}
@@ -275,7 +286,7 @@ const RCCard = ({ data }) => {
                 )}
                 {data?.data?.rc_data?.insurance_data?.company && (
                   <InfoRow
-                    label="Financer Company"
+                    label="Insurance Company"
                     value={data?.data?.rc_data.insurance_data.company}
                   />
                 )}
@@ -348,7 +359,7 @@ const RCCard = ({ data }) => {
           {/* Footer */}
           <div className=" px-6 py-4 text-white">
             <div className="text-center mb-3">
-              <Text className="text-blue-300  font-medium">
+              <Text className="text-[#249FD6]  font-medium">
                 Tap to Check the Vehicle Impound & Seizure Document Status
               </Text>
             </div>

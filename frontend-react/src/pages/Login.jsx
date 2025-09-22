@@ -26,6 +26,7 @@ const Login = () => {
       localStorage.setItem('token', data.token);
       toast.success('Login Successful!');
       navigate('/home');
+      window.location.reload()
     },
     onError: (error) => {
  

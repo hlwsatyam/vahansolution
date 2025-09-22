@@ -287,7 +287,7 @@ console.log(data)
                 )}
                 {data?.data?.rc_data?.insurance_data?.company && (
                   <InfoRow
-                    label="Financer Company"
+                    label="Insurance Company"
                     value={data?.data?.rc_data.insurance_data.company}
                   />
                 )}

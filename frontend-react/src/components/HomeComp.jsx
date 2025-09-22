@@ -8,6 +8,9 @@ import {
   MobileOutlined,
   UsergroupAddOutlined,
   ThunderboltOutlined,
+  SmileOutlined,
+  CustomerServiceOutlined,
+  LikeOutlined,
 } from "@ant-design/icons";
 import { s1, s2, s3, s4, s5, s6, s7 } from "../LOCAL/VARIABLE";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +19,25 @@ const { Title, Paragraph, Text } = Typography;
 
 const HomeContent = ({ user, services, isLoading }) => {
   const navigate = useNavigate();
+
+
+
+const stats = [
+  { value: "10000+", label: "Happy Customers", icon: <SmileOutlined /> },
+  { value: "24/7", label: "Customer Support", icon: <CustomerServiceOutlined /> },
+  { value: "99%", label: "Customer Satisfaction", icon: <LikeOutlined /> },
+];
+
+
+
+
+
+
+
+
+
+
+
 
   return (
     <main className="flex-1 overflow-y-auto mt-[60px] mb-[60px]">
@@ -71,7 +93,7 @@ const HomeContent = ({ user, services, isLoading }) => {
             {/* Extra Info */}
             <div className="mt-4 flex justify-between text-xs text-gray-300">
               <span>⏱ {service.eta || "2-3 Days"}</span>
-              <span>💰 {service.price || "Starting ₹499"}</span>
+              <span>💰 {service.price || "Free"}</span>
               <span>⭐ {service.rating || "4.8/5"}</span>
             </div>
 
@@ -88,11 +110,11 @@ const HomeContent = ({ user, services, isLoading }) => {
 </section>
 
       {/* Stats Section */}
-      <section className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 p-4">
+      {/* <section className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 p-4">
         {[
      
           { value: "10000+", label: "Happy Customers" },
-          { value: "150+", label: "Cities Covered" },
+         
           { value: "24/7", label: "Customer Support" },
           { value: "99%", label: "Customer Satisfaction" },
         ].map((stat, i) => (
@@ -107,7 +129,51 @@ const HomeContent = ({ user, services, isLoading }) => {
             <Paragraph>{stat.label}</Paragraph>
           </motion.div>
         ))}
-      </section>
+      </section> */}
+
+
+
+
+
+
+
+
+ <section className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-6 p-4">
+      {stats.map((stat, i) => (
+        <motion.div
+          key={i}
+          whileHover={{ scale: 1.05 }}
+          initial={{ x: 100, opacity: 0 }} // animate right-to-left
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: i * 0.2 }}
+        >
+          <Card
+            bordered={false}
+            className="rounded-2xl shadow-lg text-center bg-white"
+          >
+            <div className="flex flex-col items-center justify-center space-y-2">
+              <div className="text-red-600 text-4xl">{stat.icon}</div>
+              <Title level={3} className="!text-red-600 m-0">
+                {stat.value}
+              </Title>
+              <Paragraph className="m-0 text-gray-600">
+                {stat.label}
+              </Paragraph>
+            </div>
+          </Card>
+        </motion.div>
+      ))}
+    </section>
+
+
+
+
+
+
+
+
+
+
 
       {/* Why Choose Us */}
       <section className="mt-10 px-4 text-center">

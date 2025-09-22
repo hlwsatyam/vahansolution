@@ -19,7 +19,7 @@ const Header = ({ user }) => {
         <img src={logo} alt="Logo" className="w-10 h-10 rounded-full" />
         <div>
           <p className="text-[16px] font-bold my-0">Vahan Solution</p>
-          <p className="text-[11px] pl-12 text-gray-500 my-0">
+          <p className="text-[9px] pl-12 text-gray-500 my-0">
             Run Highway Without Tension
           </p>
         </div>

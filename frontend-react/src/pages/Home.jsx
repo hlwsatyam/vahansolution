@@ -44,16 +44,16 @@ const fetchServices = async () => {
         //   price: "₹29",
         //   icon: "SafetyCertificateOutlined",
         // },
-        // {
-        //   id: 4,
-        //   name: "NETC FASTag",
-        //   to: "NETC",
-        //   description: "Check Your NETC FASTag Status | NPCI - National Payments Corporation of India",
-        //   rating: 4.5,
-        //   eta: "Instant",
-        //   price: "₹8",
-        //   icon: "CarOutlined",
-        // },
+        {
+          id: 4,
+          name: "NETC FASTag",
+          to: "NETC",
+          description: "Check Your NETC FASTag Status | NPCI - National Payments Corporation of India",
+          rating: 4.5,
+          eta: "Instant",
+          price: "Free",
+          icon: "CarOutlined",
+        },
         {
           id: 5,
           name: "Driving License Verification",
@@ -64,6 +64,32 @@ const fetchServices = async () => {
           price: "₹8",
           icon: "FileTextOutlined",
         },
+
+
+   {
+          id: 4,
+          name: "Road tax payment",
+          to: "roadtext",
+          description: "Easy to Payment MV Road Tax",
+          rating: 4.5,
+          eta: "Instant",
+          price: "Free",
+          icon: "CarOutlined",
+        },
+   {
+          id: 4,
+          name: "Temporary Permit Pay",
+          to: "tempr",
+          description: "All State Temporary permits done",
+          rating: 4.5,
+          eta: "Instant",
+          price: "Free",
+          icon: "CarOutlined",
+        },
+
+
+
+
       ]);
     }, 1000);
   });

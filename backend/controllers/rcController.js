@@ -158,7 +158,32 @@ exports.getRCDetails = async (req, res) => {
       body: JSON.stringify({ rc_number: rcNumber, consent: "Y" }),
     });
 
+
+const rp = await apiRes.json();
+console.log(rp)
+ if(rp?.status==200){
+if (rp?.data?.code=='1001'){
+  return  res.status(404).json({ message: "rc not exist" });
+}
+if (rp?.data?.code=='1002'){
+  return  res.status(404).json({ message: "Vehicle record found in more than one RTO." });
+}
+if (rp?.data?.code!=='1000'){
+  return  res.status(404).json({ message: "Provided insurer mapping id is not valid" });
+}
+ }
+
+
+
+ if(rp?.status==500){
+ 
+  return  res.status(404).json({ message: "Vahan solution api server down!" });
+}
+
+
     if (!apiRes.ok) {
+
+
       // fallback mock API
       const fallbackRes = await fetch(
         "https://stoplight.io/mocks/gridlines/gridlines-api-docs/133154724/rc-api/fetch-detailed",
@@ -187,7 +212,7 @@ exports.getRCDetails = async (req, res) => {
       status: "SUCCESS",
       orderId: `RC-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
     });
-      responsiveAPI = await apiRes.json();
+      responsiveAPI = rp
     }
 
    
@@ -201,7 +226,7 @@ exports.getRCDetails = async (req, res) => {
 
     return res.json(responsiveAPI);
   } catch (error) {
-    console.error("Error fetching RC details:", error.message);
+    console.error("Error fetching RC details:", error);
     res.status(500).json({ message: error.message || "Something went wrong" });
   }
 };
