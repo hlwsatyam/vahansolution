@@ -32,12 +32,13 @@ import toast from "react-hot-toast";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import SettingsPage from "./ListSetting";
+import { backend_url } from "../LOCAL/VARIABLE";
 
 const { Title, Paragraph, Text } = Typography;
 
 const fetchMe = async () => {
   const token = localStorage.getItem("token");
-  const res = await fetch("https://api.vahansolution.co.in/api/user/me", {
+  const res = await fetch(`${backend_url}/api/user/me`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token || ""}`,
@@ -52,7 +53,7 @@ const fetchMe = async () => {
 
 const updateMe = async (payload) => {
   const token = localStorage.getItem("token");
-  const res = await fetch("https://api.vahansolution.co.in/api/user/me", {
+  const res = await fetch(`${backend_url}/api/user/me`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",

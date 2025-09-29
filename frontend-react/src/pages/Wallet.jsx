@@ -7,16 +7,17 @@ import {
 } from "@ant-design/icons";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { backend_url } from "../LOCAL/VARIABLE";
 
 const { Title, Text } = Typography;
 
 const fetchBalance = async (userId) => {
-  const res = await fetch(`https://api.vahansolution.co.in/api/wallet/balance/${userId}`);
+  const res = await fetch(`${backend_url}/api/wallet/balance/${userId}`);
   return res.json();
 };
 
 const fetchHistory = async (userId) => {
-  const res = await fetch(`https://api.vahansolution.co.in/api/wallet/history/${userId}`);
+  const res = await fetch(`${backend_url}/api/wallet/history/${userId}`);
   return res.json();
 };
 
@@ -36,7 +37,7 @@ const Wallet = ({ user }) => {
 
   const sendMessageToWhatsapp = useMutation({
     mutationFn: async () => {
-      const res = await fetch("https://api.vahansolution.co.in/api/wallet/add-funds", {
+      const res = await fetch(`${backend_url}/api/wallet/add-funds`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId: user._id, amount }),

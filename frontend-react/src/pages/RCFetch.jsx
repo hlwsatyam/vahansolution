@@ -12,6 +12,7 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 import RCCard from "../components/RCCard";
+import { backend_url } from "../LOCAL/VARIABLE";
 
 const { Title, Paragraph } = Typography;
 
@@ -27,7 +28,7 @@ const fetchRCDetails = async (rcNumber) => {
       toast.error(" (user) not provided in URL!");
       throw new Error("  user not provided");
     }
-  const res = await fetch(`https://api.vahansolution.co.in/api/rc/${rcNumber}/${user}`); // apna backend endpoint
+  const res = await fetch(`${backend_url}/api/rc/${rcNumber}/${user}`); // apna backend endpoint
   if (!res.ok) {
 
   const errorData = await res.json().catch(() => ({

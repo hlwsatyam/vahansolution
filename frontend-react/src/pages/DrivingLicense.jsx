@@ -11,6 +11,7 @@ import {
 import dayjs from "dayjs";
 import Panel from "antd/es/splitter/Panel";
 import LicenseCard from "../components/LicenseCard";
+import { backend_url } from "../LOCAL/VARIABLE";
 
 const { Title, Paragraph } = Typography;
 
@@ -19,7 +20,7 @@ const fetchDrivingLicenseDetails = async (licenseData) => {
   const { licenseNumber, dob } = licenseData;
     const params = new URLSearchParams(window.location.search);
     const user = params.get("user");
-  const res = await fetch("https://api.vahansolution.co.in/api/rc/driving-license", {
+  const res = await fetch(`${backend_url}/api/rc/driving-license`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -6,9 +6,10 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { backend_url } from "../LOCAL/VARIABLE";
 
 const { Title } = Typography;
-const API_URL = "https://api.vahansolution.co.in/api";
+const API_URL = `${backend_url}/api`;
 
 const ForgotPassword = () => {
   const [step, setStep] = useState(1);

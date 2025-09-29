@@ -28,6 +28,7 @@ import {
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { backend_url } from '../LOCAL/VARIABLE';
 
 const { Title, Text } = Typography;
 
@@ -49,7 +50,7 @@ const WalletManagementSystem = () => {
 
   // Search user query
   const searchUser = async (identifier) => {
-    const response = await axios.get(`https://api.vahansolution.co.in/api/wallet/search?identifier=${identifier}`);
+    const response = await axios.get(`${backend_url}/api/wallet/search?identifier=${identifier}`);
     return response.data;
   };
 
@@ -62,7 +63,7 @@ const WalletManagementSystem = () => {
 
   // Update wallet mutation
   const updateWallet = async (updateData) => {
-    const response = await axios.post('https://api.vahansolution.co.in/api/wallet/update-wallet', updateData);
+    const response = await axios.post(`${backend_url}/api/wallet/update-wallet`, updateData);
     return response.data;
   };
 

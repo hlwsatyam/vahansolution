@@ -19,44 +19,164 @@ import {
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { QRCodeCanvas } from "qrcode.react";
-import { mlogo } from "../LOCAL/VARIABLE";
+import { mlogo, mprihanan } from "../LOCAL/VARIABLE";
 
 const { Title, Text } = Typography;
 
 const RCCard = ({ data }) => {
   const cardRef = useRef();
  console.log(data)
-  const handleShare = async () => {
-    const element = cardRef.current;
-    const canvas = await html2canvas(element, {
+  // const handleShare = async () => {
+  //   const element = cardRef.current;
+  //   const canvas = await html2canvas(element, {
+  //     scale: 2,
+  //     useCORS: true,
+  //     scrollX: 0,
+  //     scrollY: 0,
+  //     windowWidth: document.documentElement.scrollWidth,
+  //     windowHeight: document.documentElement.scrollHeight,
+  //   });
+
+  //   const imgData = canvas.toDataURL("image/png");
+  //   const pdf = new jsPDF("p", "mm", "a4");
+  //   const pdfWidth = pdf.internal.pageSize.getWidth();
+  //   const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+  //   let heightLeft = pdfHeight;
+  //   let position = 0;
+
+  //   pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
+  //   heightLeft -= pdf.internal.pageSize.getHeight();
+
+  //   while (heightLeft > 0) {
+  //     position = heightLeft - pdfHeight;
+  //     pdf.addPage();
+  //     pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
+  //     heightLeft -= pdf.internal.pageSize.getHeight();
+  //   }
+
+  //   pdf.save("rc_card.pdf");
+  // };
+
+
+
+
+
+
+
+// const handleShare = async () => {
+//   const element = cardRef.current;
+
+//   // पूरा div को canvas में convert
+//   const canvas = await html2canvas(element, {
+//     scale: 2,
+//     useCORS: true,
+//     scrollX: 0,
+//     scrollY: -window.scrollY, // scroll को ignore करने के लिए
+//     windowWidth: document.documentElement.scrollWidth,
+//     windowHeight: document.documentElement.scrollHeight,
+//   });
+
+//   const imgData = canvas.toDataURL("image/png");
+
+//   // ✅ अगर मोबाइल/ब्राउज़र Web Share API सपोर्ट करता है
+//   if (navigator.canShare && navigator.canShare({ files: [] })) {
+//     const blob = await (await fetch(imgData)).blob();
+//     const file = new File([blob], "rc_card.png", { type: "image/png" });
+
+//     try {
+//       await navigator.share({
+//         files: [file],
+//         title: "RC Card",
+//         text: "Here is the virtual RC card",
+//       });
+//     } catch (err) {
+//       console.log("Share canceled:", err);
+//     }
+//   } else {
+//     // ✅ Fallback: सिर्फ download कर दो
+//     const link = document.createElement("a");
+//     link.href = imgData;
+//     link.download = "rc_card.png";
+//     link.click();
+//   }
+// };
+
+
+  const pageRef = useRef(); 
+
+
+// const handleShare = async () => {
+//     const element = pageRef.current;
+
+//     html2canvas से full page को image में बदलना
+//     const canvas = await html2canvas(element, {
+//       scale: 2,
+//       useCORS: true,
+//       scrollX: 0,
+//       scrollY: -window.scrollY, // scroll issue fix
+//       windowWidth: document.documentElement.scrollWidth,
+//       windowHeight: document.documentElement.scrollHeight,
+//     });
+
+//     const imgData = canvas.toDataURL("image/png");
+
+//     ✅ अगर browser share सपोर्ट करता है
+//     if (navigator.canShare && navigator.canShare({ files: [] })) {
+//       const blob = await (await fetch(imgData)).blob();
+//       const file = new File([blob], "rc_card.png", { type: "image/png" });
+
+//       try {
+//         await navigator.share({
+//           files: [file],
+//           title: "RC Card",
+//           text: "Here is the virtual RC card",
+//         });
+//       } catch (err) {
+//         console.log("Share canceled:", err);
+//       }
+//     } else {
+//       ✅ fallback → download
+//       const link = document.createElement("a");
+//       link.href = imgData;
+//       link.download = "rc_card.png";
+//       link.click();
+//     }
+//   };
+
+
+const handleShare = async () => {
+  if (!pageRef.current) return;
+
+  try {
+    const canvas = await html2canvas(pageRef.current, {
       scale: 2,
       useCORS: true,
       scrollX: 0,
-      scrollY: 0,
+      scrollY: -window.scrollY,
       windowWidth: document.documentElement.scrollWidth,
       windowHeight: document.documentElement.scrollHeight,
     });
 
+    // Convert canvas to Blob
     const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF("p", "mm", "a4");
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    const blob = await (await fetch(imgData)).blob();
+    const file = new File([blob], "rc_card.png", { type: "image/png" });
 
-    let heightLeft = pdfHeight;
-    let position = 0;
-
-    pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
-    heightLeft -= pdf.internal.pageSize.getHeight();
-
-    while (heightLeft > 0) {
-      position = heightLeft - pdfHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
-      heightLeft -= pdf.internal.pageSize.getHeight();
+    // ✅ अगर Web Share API सपोर्ट करता है → share
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        files: [file],
+        title: "RC Card",
+        text: "Here is the Virtual RC Card 🚘",
+      });
+    } else {
+      alert("Sharing not supported on this device/browser");
     }
-
-    pdf.save("rc_card.pdf");
-  };
+  } catch (error) {
+    console.error("Error sharing:", error);
+  }
+};
 
   const rc = data?.data?.rc_data || {};
   const owner = rc.owner_data || {};
@@ -96,7 +216,7 @@ const RCCard = ({ data }) => {
   );
 
   return (
-    <div className="flex-col justify-center p-0   min-h-screen">
+    <div  ref={pageRef} className="flex-col justify-center p-0   min-h-screen">
 
 
 
@@ -120,8 +240,9 @@ const RCCard = ({ data }) => {
       {/* Center logo & text */}
       <div className="flex flex-row gap-2 items-center">
         <img
-          src="https://play-lh.googleusercontent.com/YqOG9GBAB3n9Cw9NbkdlgcV8H1UuxqtotohizT8BjFK8QWVgjSEoEO1Gr-AyJMg5Tw"
+          src={mprihanan}
           alt="logo"
+         
           style={{ width: 40, height: 40, borderRadius: "50%", marginBottom: 2 }}
         />
         <div>

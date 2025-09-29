@@ -12,12 +12,13 @@ import {
   ArrowLeftOutlined,
 } from "@ant-design/icons";
 import RCCWithChallanCard from "../components/RCCWithChallanCard";
+import { backend_url } from "../LOCAL/VARIABLE";
 
 const { Title, Paragraph } = Typography;
 
 // ✅ Backend se fetch karna
 const fetchRCDetails = async (rcNumber) => {
-  const res = await fetch(`https://api.vahansolution.co.in/api/rc/rcwithchallan/${rcNumber}`); // apna backend endpoint
+  const res = await fetch(`${backend_url}/api/rc/rcwithchallan/${rcNumber}`); // apna backend endpoint
   if (!res.ok) {
 
   const errorData = await res.json().catch(() => ({

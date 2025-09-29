@@ -7,9 +7,9 @@ import { useMutation } from "@tanstack/react-query";
 import toast, { Toaster } from "react-hot-toast";
 import { motion } from "framer-motion";
 import axios from "axios";
-import { logo } from "../LOCAL/VARIABLE";
+import { backend_url, logo } from "../LOCAL/VARIABLE";
 
-const API_URL = "https://api.vahansolution.co.in/api";
+const API_URL = `${backend_url}/api`;
 
 const registerUser = async (values) => {
   const res = await axios.post(`${API_URL}/register`, values);

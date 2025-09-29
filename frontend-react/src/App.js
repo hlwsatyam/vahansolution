@@ -32,6 +32,7 @@ import CancellationRefundPolicy from "./pages/policy/CancellationRefundPolicy";
 import Wallet from "./pages/Wallet";
 import IncToken from "./pages/IncToken";
 import ViewRCONLY from "./pages/ViewRCONLY";
+import { backend_url } from "./LOCAL/VARIABLE";
 
 const queryClient = new QueryClient();
 
@@ -87,7 +88,7 @@ const AppWrapper = () => {
 
 const fetchMe = async () => {
   const token = localStorage.getItem("token");
-  const res = await fetch("https://api.vahansolution.co.in/api/user/me", {
+  const res = await fetch(`${backend_url}/api/user/me`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token || ""}`,

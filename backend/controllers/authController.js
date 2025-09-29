@@ -245,9 +245,9 @@ const user = await User.findOne({
 console.log(user)
     if (!user) return res.status(400).json({ message: "Invalid credentials" });
 
-    if (!user.isVerified) {
-      return res.status(400).json({ message: "Please verify your email first" });
-    }
+    // if (!user.isVerified) {
+    //   return res.status(400).json({ message: "Please verify your email first" });
+    // }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid password" });
