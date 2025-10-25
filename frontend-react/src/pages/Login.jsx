@@ -23,6 +23,7 @@ const Login = () => {
   const mutation = useMutation({
     mutationFn: loginUser, // v5: use `mutationFn` instead of passing function directly
     onSuccess: (data) => {
+      console.log(data)
       localStorage.setItem('token', data.token);
       toast.success('Login Successful!');
       navigate('/home');

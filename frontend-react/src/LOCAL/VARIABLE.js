@@ -9,8 +9,8 @@ import mlogo from "./mlogo.jpeg";
 import s7 from "./s7.jpg";
 import s8 from "./s8.jpg";
 import mprihanan from "./mprihanan.png";
-const backend_url="https://api.vahansolution.co.in" 
-// const backend_url="http://localhost:5000" 
+// const backend_url="https://api.vahansolution.co.in" 
+const backend_url="http://localhost:5000" 
 
 export { 
   logo, mprihanan,

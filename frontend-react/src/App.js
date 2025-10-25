@@ -41,40 +41,56 @@ const ProtectedRoute = ({ children }) => {
   return token ? children : <Navigate to="/login" />;
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const AppWrapper = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
+  // const location = useLocation();
+  // const navigate = useNavigate();
 
-  useEffect(() => {
-    if (Capacitor.isNativePlatform()) {
-      StatusBar.setBackgroundColor({ color: "#000000" }); // black background
-      StatusBar.setStyle({ style: Style.Light }); // white icons
-      StatusBar.show(); // make sure it's visible
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (Capacitor.isNativePlatform()) {
+  //     StatusBar.setBackgroundColor({ color: "#000000" });  
+  //     StatusBar.setStyle({ style: Style.Light });  
+  //     StatusBar.show();  
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    if (Capacitor.isNativePlatform()) {
-      const backListener = CapacitorApp.addListener(
-        "backButton",
-        ({ canGoBack }) => {
-          if (location.pathname === "/home" || location.pathname === "/login") {
-            if (window.confirm("Are you sure you want to exit?")) {
-              CapacitorApp.exitApp();
-            }
-          } else if (canGoBack) {
-            navigate(-1);
-          } else {
-            CapacitorApp.exitApp();
-          }
-        }
-      );
+  // useEffect(() => {
+  //   console.log( Capacitor.isNativePlatform())
+  //   if (Capacitor.isNativePlatform()) {
+  //     const backListener = CapacitorApp.addListener(
+  //       "backButton",
+  //       ({ canGoBack }) => {
+  //         if (location.pathname === "/home" || location.pathname === "/login") {
+  //           if (window.confirm("Are you sure you want to exit?")) {
+  //             CapacitorApp.exitApp();
+  //           }
+  //         } else if (canGoBack) {
+  //           navigate(-1);
+  //         } else {
+  //           CapacitorApp.exitApp();
+  //         }
+  //       }
+  //     );
 
-      return () => {
-        backListener.remove();
-      };
-    }
-  }, [location.pathname, navigate]);
+  //     return () => {
+  //       backListener.remove();
+  //     };
+  //   }
+  // }, [location.pathname, navigate]);
 
 
 
@@ -102,15 +118,34 @@ const fetchMe = async () => {
 };
 
 
-  const { data,refetch, isLoading } = useQuery({
+  const { data,refetch,   isError,
+    error,           isLoading } = useQuery({
     queryKey: ["me"],
     queryFn: fetchMe,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
     retry: false,
-    onError: (e) => toast.error(e.message),
+    
   });
 
-  const user = data?.user; // ✅ ensure we only pass user object
+
+  const navigate = useNavigate();
+
+
+  useEffect(() => {
+    console.log( error, isError)
+    if (isError) {
+      console.warn("User fetch error:", error?.message);
+      localStorage.removeItem("token");  
+      navigate("/login");
+    }
+  }, [isError, error, navigate]);
+
+
+
+
+
+
+  const user = data?.user;  
 
   // --- Optional: show loader while checking user ---
   if (isLoading && localStorage.getItem("token")) {
@@ -171,23 +206,36 @@ const fetchMe = async () => {
   );
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 function App() {
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const hideSplash = async () => {
-      setTimeout(async () => {
-        setLoading(false);
-        if (Capacitor.isNativePlatform()) {
-          const { SplashScreen } = await import("@capacitor/splash-screen");
-          SplashScreen.hide();
-        }
-      }, 2000);
-    };
-    hideSplash();
-  }, []);
+  // useEffect(() => {
+  //   const hideSplash = async () => {
+  //     setTimeout(async () => {
+  //       setLoading(false);
+  //       if (Capacitor.isNativePlatform()) {
+  //         const { SplashScreen } = await import("@capacitor/splash-screen");
+  //         SplashScreen.hide();
+  //       }
+  //     }, 2000);
+  //   };
+  //   hideSplash();
+  // }, []);
 
-  if (loading) return <SplashScreen />;
+  // if (loading) return <SplashScreen />;
 
   return (
     <Router>

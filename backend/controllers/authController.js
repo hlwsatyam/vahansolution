@@ -242,7 +242,7 @@ const user = await User.findOne({
     { mobile: email }
   ]
 });
-console.log(user)
+ 
     if (!user) return res.status(400).json({ message: "Invalid credentials" });
 
     // if (!user.isVerified) {

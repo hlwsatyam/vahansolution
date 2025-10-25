@@ -102,6 +102,102 @@ const WalletTransaction = require("../models/WalletTransaction.js");
 
 
 
+async function fetchRCDetails(res, user, rcNumber) {
+  console.log("Fetching RC details...");
+
+  try {
+    // 1️⃣ Call Surepass Primary API
+    const primaryResponse = await fetch("https://kyc-api.surepass.io/api/v1/rc/rc-full", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc2MDUyMjYzNywianRpIjoiNTFhZDYzZmUtZGJjMC00NDVmLTk0NjUtMjQyZWJmMzMxYjE0IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnNheWVlZGFud2FyQHN1cmVwYXNzLmlvIiwibmJmIjoxNzYwNTIyNjM3LCJleHAiOjIzOTEyNDI2MzcsImVtYWlsIjoic2F5ZWVkYW53YXJAc3VyZXBhc3MuaW8iLCJ0ZW5hbnRfaWQiOiJtYWluIiwidXNlcl9jbGFpbXMiOnsic2NvcGVzIjpbInVzZXIiXX19.31a04E3IF0XiqOKp1f3IJLRI9uT1pvqo01uhgV71MXk",
+      },
+      body: JSON.stringify({ id_number: rcNumber }),
+    });
+
+    const primaryData = await primaryResponse.json();
+    console.log("Primary API Response:", primaryData);
+
+    // 2️⃣ If primary API failed, try fallback
+    let rcResultData = null;
+
+    if (primaryData?.status_code !== 200) {
+      console.log("Primary API failed, trying fallback API...");
+
+      const fallbackResponse = await fetch("https://kyc-api.surepass.app/api/v1/rc/rc-v2", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc2MDUyMjYzNywianRpIjoiNTFhZDYzZmUtZGJjMC00NDVmLTk0NjUtMjQyZWJmMzMxYjE0IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnNheWVlZGFud2FyQHN1cmVwYXNzLmlvIiwibmJmIjoxNzYwNTIyNjM3LCJleHAiOjIzOTEyNDI2MzcsImVtYWlsIjoic2F5ZWVkYW53YXJAc3VyZXBhc3MuaW8iLCJ0ZW5hbnRfaWQiOiJtYWluIiwidXNlcl9jbGFpbXMiOnsic2NvcGVzIjpbInVzZXIiXX19.31a04E3IF0XiqOKp1f3IJLRI9uT1pvqo01uhgV71MXk",
+        },
+        body: JSON.stringify({
+          id_number: rcNumber,
+          enrich: true,
+        }),
+      });
+
+      const fallbackData = await fallbackResponse.json();
+      console.log("Fallback API Response:", fallbackData);
+
+      if (fallbackData?.status_code !== 200) {
+        // ❌ Both APIs failed
+        await WalletTransaction.create({
+          user: user._id,
+          amount: 0,
+          type: "DEBIT",
+          reason: `RC Fetch - ${rcNumber}`,
+          status: "FAILED",
+          orderId: `RC-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+        });
+
+        return res.status(500).json({
+          success: false,
+          message: "Vahan Solution Server Down",
+        });
+      }
+
+      rcResultData = fallbackData;
+    } else {
+      rcResultData = primaryData;
+    }
+
+    // 3️⃣ Deduct ₹8 from wallet and log successful transaction
+    await User.findByIdAndUpdate(
+      user._id,
+      { $inc: { wallet_point: -8 } },
+      { new: true }
+    );
+
+    await WalletTransaction.create({
+      user: user._id,
+      amount: 8,
+      type: "DEBIT",
+      reason: `RC Fetch - ${rcNumber}`,
+      status: "SUCCESS",
+      orderId: `RC-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+    });
+
+    // 4️⃣ Save RC data in database
+    const rcData = new RC({ rcNumber, data: rcResultData });
+    await rcData.save();
+
+    // 5️⃣ Return final response
+    return res.json(rcResultData);
+
+  } catch (error) {
+    console.error("Error in fetchRCDetails:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch RC details",
+      error: error.message,
+    });
+  }
+}
+
 
 
 
@@ -116,6 +212,76 @@ exports.getRCDetails = async (req, res) => {
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "User not found" });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     // Check if wallet has enough balance
     if (user.wallet_point < 8) {
       return res.status(400).json({ message: "Insufficient wallet balance" });
@@ -138,7 +304,7 @@ exports.getRCDetails = async (req, res) => {
         status: "SUCCESS",
         orderId: `RC-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
       });
-
+ 
       return res.json(rcData.data);
     }
 
@@ -160,16 +326,36 @@ exports.getRCDetails = async (req, res) => {
 
 
 const rp = await apiRes.json();
-console.log(rp)
+
  if(rp?.status==200){
+
 if (rp?.data?.code=='1001'){
-  return  res.status(404).json({ message: "rc not exist" });
+  
+  
+
+
+return await fetchRCDetails(  res, user, rcNumber);
+
+
+
+
+
+
+
+
+
+
+
 }
 if (rp?.data?.code=='1002'){
-  return  res.status(404).json({ message: "Vehicle record found in more than one RTO." });
+return await fetchRCDetails(  res, user, rcNumber);
+
+
 }
 if (rp?.data?.code!=='1000'){
-  return  res.status(404).json({ message: "Provided insurer mapping id is not valid" });
+  return await fetchRCDetails(  res, user, rcNumber);
+
+
 }
  }
 
@@ -177,30 +363,22 @@ if (rp?.data?.code!=='1000'){
 
  if(rp?.status==500){
  
-  return  res.status(404).json({ message: "Vahan solution api server down!" });
+return await fetchRCDetails(  res, user, rcNumber);
+
+
 }
 
 
     if (!apiRes.ok) {
 
-
-      // fallback mock API
-      const fallbackRes = await fetch(
-        "https://stoplight.io/mocks/gridlines/gridlines-api-docs/133154724/rc-api/fetch-detailed",
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            "X-API-Key": "test-credential-396015679557935104",
-            "X-Auth-Type": "API-Key",
-            "X-Reference-ID": "",
-          },
-          body: JSON.stringify({ rc_number: rcNumber, consent: "Y" }),
-        }
-      );
-      responsiveAPI = await fallbackRes.json();
+return await fetchRCDetails(  res, user, rcNumber);
+ 
+   
     } else {
+
+
+
+
        user.wallet_point -= 8;
     await user.save();
 

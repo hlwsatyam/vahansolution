@@ -5,7 +5,7 @@ const { getMe, updateMe } = require("../controllers/userController");
 const router = express.Router();
 
 router.post("/register", registerUser);
-router.post("/login", loginUser);
+router.post("/login", loginUser); 
 router.get("/verify/:token", verifyUser);  
 
 router.post("/forgot-password", forgotPassword);
